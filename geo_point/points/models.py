@@ -1,5 +1,9 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 
 class LocationPoint(models.Model):
@@ -72,4 +76,40 @@ class LocationPoint(models.Model):
         if self.longitude:
             self.longitude = round(self.longitude, 6)
         super().save(*args, **kwargs)
+
+
+class PointMessage(models.Model):
+    """
+    Модель для сообщений, привязанных к географической точке
+    """
+    point = models.ForeignKey(
+        LocationPoint,
+        on_delete=models.CASCADE,
+        related_name='messages',
+        verbose_name="Точка"
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='point_messages',
+        verbose_name="Пользователь"
+    )
+    text = models.TextField(
+        verbose_name="Текст сообщения"
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания"
+    )
     
+    class Meta:
+        verbose_name = "Сообщение точки"
+        verbose_name_plural = "Сообщения точек"
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['point', 'created_at']),
+            models.Index(fields=['user', 'created_at']),
+        ]
+    
+    def __str__(self):
+        return f"Сообщение от {self.user.username} к точке {self.point.name}"
