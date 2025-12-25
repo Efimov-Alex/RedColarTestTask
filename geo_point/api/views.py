@@ -5,12 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 import math
+from points.utils import get_distance, get_points_in_radius
 
 from points.models import LocationPoint, PointMessage
 from .serializers import (
     LocationPointSerializer, 
     PointMessageSerializer,
     PointMessageCreateSerializer,
+    RadiusSearchSerializer
 )
 
 class LocationPointViewSet(viewsets.GenericViewSet,
@@ -30,6 +32,31 @@ class LocationPointViewSet(viewsets.GenericViewSet,
     filterset_fields = ['name']
     search_fields = ['name', 'description', 'address']
     ordering_fields = ['created_at', 'name']
+
+    @action(detail=False,
+            methods=['get'],
+            permission_classes=(IsAuthenticated,))
+    def search(self, request):
+        serializer = RadiusSearchSerializer(data=request.query_params)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        lat = serializer.validated_data['latitude']
+        lon = serializer.validated_data['longitude']
+        radius_km = serializer.validated_data['radius']
+
+        points = get_points_in_radius(lat, lon, radius_km)
+
+        return Response({
+            'center_latitude': lat,
+            'center_longitude': lon,
+            'radius_km': radius_km,
+            'points_count': len(points),
+            'points': points
+        })
 
 class PointMessageViewSet(
     mixins.CreateModelMixin,

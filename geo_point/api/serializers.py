@@ -27,3 +27,14 @@ class PointMessageSerializer(serializers.ModelSerializer):
         model = PointMessage
         fields = ['id', 'point', 'point_name', 'user', 'user_id', 'text', 'created_at']
         read_only_fields = ('user', 'created_at')
+
+class RadiusSearchSerializer(serializers.Serializer):
+    latitude = serializers.FloatField(
+        help_text="Широта центра поиска"
+    )
+    longitude = serializers.FloatField(
+        help_text="Долгота центра поиска"
+    )
+    radius = serializers.FloatField(
+        help_text="Радиус поиска в километрах"
+    )
