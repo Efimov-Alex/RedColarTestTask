@@ -38,3 +38,17 @@ class RadiusSearchSerializer(serializers.Serializer):
     radius = serializers.FloatField(
         help_text="Радиус поиска в километрах"
     )
+
+
+class PointMessageSearchSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
+    user_id = serializers.ReadOnlyField(source='user.id')
+    point_name = serializers.ReadOnlyField(source='point.name')
+    point_latitude = serializers.ReadOnlyField(source='point.latitude')
+    point_longitude = serializers.ReadOnlyField(source='point.longitude')
+    distance_km = serializers.FloatField(read_only=True)
+    
+    class Meta:
+        model = PointMessage
+        fields = ['id', 'point', 'point_name', 'point_latitude', 'point_longitude',
+                  'user', 'user_id', 'text', 'created_at', 'distance_km']
