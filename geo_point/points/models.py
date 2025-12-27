@@ -2,14 +2,12 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth import get_user_model
 
-
 User = get_user_model()
 
 
 class LocationPoint(models.Model):
-    """
-    Модель для хранения географических точек без GeoDjango
-    """
+    """Модель для хранения географических точек."""
+
     name = models.CharField(
         max_length=255,
         verbose_name="Название точки"
@@ -19,7 +17,6 @@ class LocationPoint(models.Model):
         null=True,
         verbose_name="Описание"
     )
-    
     latitude = models.DecimalField(
         max_digits=9,
         decimal_places=6,
@@ -30,7 +27,6 @@ class LocationPoint(models.Model):
         ],
         help_text="Широта в градусах от -90 до 90"
     )
-    
     longitude = models.DecimalField(
         max_digits=9,
         decimal_places=6,
@@ -41,14 +37,12 @@ class LocationPoint(models.Model):
         ],
         help_text="Долгота в градусах от -180 до 180"
     )
-    
     address = models.CharField(
         max_length=500,
         blank=True,
         null=True,
         verbose_name="Адрес"
     )
-    
     created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата создания"
@@ -57,8 +51,10 @@ class LocationPoint(models.Model):
         auto_now=True,
         verbose_name="Дата обновления"
     )
-    
+
     class Meta:
+        """Мета-класс."""
+
         verbose_name = "Географическая точка"
         verbose_name_plural = "Географические точки"
         ordering = ['-created_at']
@@ -66,11 +62,13 @@ class LocationPoint(models.Model):
             models.Index(fields=['created_at']),
             models.Index(fields=['latitude', 'longitude']),
         ]
-    
+
     def __str__(self):
+        """Представление в виде строки."""
         return f"{self.name} ({self.latitude}, {self.longitude})"
-    
+
     def save(self, *args, **kwargs):
+        """Сохранение."""
         if self.latitude:
             self.latitude = round(self.latitude, 6)
         if self.longitude:
@@ -79,9 +77,8 @@ class LocationPoint(models.Model):
 
 
 class PointMessage(models.Model):
-    """
-    Модель для сообщений, привязанных к географической точке
-    """
+    """Модель для сообщений, привязанных к географической точке."""
+
     point = models.ForeignKey(
         LocationPoint,
         on_delete=models.CASCADE,
@@ -101,8 +98,10 @@ class PointMessage(models.Model):
         auto_now_add=True,
         verbose_name="Дата создания"
     )
-    
+
     class Meta:
+        """Мета-класс."""
+
         verbose_name = "Сообщение точки"
         verbose_name_plural = "Сообщения точек"
         ordering = ['-created_at']
@@ -110,6 +109,7 @@ class PointMessage(models.Model):
             models.Index(fields=['point', 'created_at']),
             models.Index(fields=['user', 'created_at']),
         ]
-    
+
     def __str__(self):
+        """Представление в виде строки."""
         return f"Сообщение от {self.user.username} к точке {self.point.name}"
