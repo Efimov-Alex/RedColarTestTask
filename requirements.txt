@@ -3,16 +3,23 @@ Django>=5.0,<5.1
 djangorestframework>=3.15
 psycopg2-binary>=2.9.9
 djoser>=2.2.0
-social-auth-app-django>=5.3.0 
+social-auth-app-django>=5.3.0
+
+# GeoDjango и пространственные данные
+django-filter>=23.5
+django-cors-headers>=4.3.0
+gunicorn>=21.2.0
+
 # Тестирование
 pytest>=7.4
 pytest-django>=4.8
 pytest-cov>=4.1
 
-black>=24.0  # Форматирование кода
-flake8>=6.1  # Линтинг
-django-debug-toolbar>=4.2  # Отладка
+# Форматирование и линтинг
+black>=24.0
+flake8>=6.1
+django-debug-toolbar>=4.2
 
 # Утилиты
-python-dotenv>=1.0  # Переменные окружения
-geopy>=2.4.0 
+python-dotenv>=1.0
+geopy>=2.4.0

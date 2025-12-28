@@ -21,19 +21,13 @@ class LocationPointViewSet(viewsets.GenericViewSet,
                            mixins.CreateModelMixin):
     """Вьюсет для создания точек."""
 
+    permission_classes = [IsAuthenticated]
     queryset = LocationPoint.objects.all()
+    serializer_class = LocationPointSerializer
 
-    def get_serializer_class(self):
-        """Получение сериализатора."""
-        return LocationPointSerializer
-
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ['name']
-    search_fields = ['name', 'description', 'address']
+    def get_queryset(self):
+        """Получить все объекты."""
+        return LocationPoint.objects.all()
     ordering_fields = ['created_at', 'name']
 
     @action(detail=False,
@@ -63,12 +57,9 @@ class LocationPointViewSet(viewsets.GenericViewSet,
         })
 
 
-class PointMessageViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
-):
+class PointMessageViewSet(viewsets.GenericViewSet,
+                          mixins.ListModelMixin,
+                          mixins.CreateModelMixin):
     """Вьюсет для работы с сообщениями точек."""
 
     queryset = PointMessage.objects.all()
@@ -82,13 +73,6 @@ class PointMessageViewSet(
             return PointMessageSearchSerializer
         return PointMessageSerializer
 
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    filterset_fields = ['point', 'user']
-    search_fields = ['text']
     ordering_fields = ['created_at']
 
     def perform_create(self, serializer):

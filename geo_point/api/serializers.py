@@ -23,6 +23,11 @@ class PointMessageCreateSerializer(serializers.ModelSerializer):
         model = PointMessage
         fields = ['point', 'text']
 
+    def create(self, validated_data):
+        """Добавление пользователя."""
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
+
     def validate_point(self, value):
         """Валидация точки."""
         if not LocationPoint.objects.filter(id=value.id).exists():
@@ -50,9 +55,13 @@ class RadiusSearchSerializer(serializers.Serializer):
     """Сериализатор для получения точек по радиусу."""
 
     latitude = serializers.FloatField(
+        min_value=-90,
+        max_value=90,
         help_text="Широта центра поиска"
     )
     longitude = serializers.FloatField(
+        min_value=-180,
+        max_value=180,
         help_text="Долгота центра поиска"
     )
     radius = serializers.FloatField(
