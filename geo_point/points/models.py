@@ -2,9 +2,6 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
-
 class LocationPoint(models.Model):
     """Модель для хранения географических точек."""
 
@@ -86,7 +83,7 @@ class PointMessage(models.Model):
         verbose_name="Точка"
     )
     user = models.ForeignKey(
-        User,
+        'users.User',
         on_delete=models.CASCADE,
         related_name='point_messages',
         verbose_name="Пользователь"

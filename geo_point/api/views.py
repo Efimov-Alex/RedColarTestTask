@@ -49,10 +49,9 @@ class LocationPointViewSet(viewsets.GenericViewSet,
         points = get_points_in_radius(lat, lon, radius_km)
 
         return Response({
-            'center_latitude': lat,
-            'center_longitude': lon,
+            'center': {'latitude': lat, 'longitude': lon},
             'radius_km': radius_km,
-            'points_count': len(points),
+            'count': len(points),
             'points': points
         })
 
@@ -97,10 +96,9 @@ class PointMessageViewSet(viewsets.GenericViewSet,
         points_with_distance = get_points_in_radius(lat, lon, radius_km)
         if not points_with_distance:
             return Response({
-                'center_latitude': lat,
-                'center_longitude': lon,
+                'center': {'latitude': lat, 'longitude': lon},
                 'radius_km': radius_km,
-                'messages_count': 0,
+                'count': 0,
                 'messages': []
             })
         point_distance_map = {item['id']: item['distance_km']
@@ -116,9 +114,8 @@ class PointMessageViewSet(viewsets.GenericViewSet,
         result_data.sort(key=lambda x: x['distance_km'])
 
         return Response({
-            'center_latitude': lat,
-            'center_longitude': lon,
+            'center': {'latitude': lat, 'longitude': lon},
             'radius_km': radius_km,
-            'messages_count': len(result_data),
+            'count': len(result_data),
             'messages': result_data
         })

@@ -13,6 +13,18 @@ class LocationPointSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('created_at', 'updated_at')
 
+    def validate_latitude(self, value):
+        """Валидация широты."""
+        if not -90 <= value <= 90:
+            raise serializers.ValidationError("Широта должна быть в диапазоне от -90 до 90 градусов.")
+        return round(value, 6)
+    
+    def validate_longitude(self, value):
+        """Валидация долготы."""
+        if not -180 <= value <= 180:
+            raise serializers.ValidationError("Долгота должна быть в диапазоне от -180 до 180 градусов.")
+        return round(value, 6)
+
 
 class PointMessageCreateSerializer(serializers.ModelSerializer):
     """Сериализатор для создания сообщения для точки."""
@@ -41,13 +53,16 @@ class PointMessageSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     user_id = serializers.ReadOnlyField(source='user.id')
     point_name = serializers.ReadOnlyField(source='point.name')
+    point_latitude = serializers.ReadOnlyField(source='point.latitude')
+    point_longitude = serializers.ReadOnlyField(source='point.longitude')
 
     class Meta:
         """Мета-класс."""
-
         model = PointMessage
-        fields = ['id', 'point', 'point_name', 'user',
-                  'user_id', 'text', 'created_at']
+        fields = [
+            'id', 'point', 'point_name', 'point_latitude', 
+            'point_longitude', 'user', 'user_id', 'text', 'created_at'
+        ]
         read_only_fields = ('user', 'created_at')
 
 
