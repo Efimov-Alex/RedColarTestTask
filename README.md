@@ -205,11 +205,11 @@ curl -X POST http://127.0.0.1:8000/api/points/ \
   -H "Authorization: Bearer <access_token>" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Эйфелева башня",
-    "description": "Знаменитая башня в Париже",
-    "latitude": 48.8584,
-    "longitude": 2.2945,
-    "address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris"
+    "name": "Красная площадь",
+    "description": "Главная площадь Москвы",
+    "latitude": 55.753900,
+    "longitude": 37.620800,
+    "address": "Москва, Красная площадь, 1"
   }'
 ```
 
@@ -218,13 +218,13 @@ curl -X POST http://127.0.0.1:8000/api/points/ \
 ```json
 {
   "id": 1,
-  "name": "Эйфелева башня",
-  "description": "Знаменитая башня в Париже",
-  "latitude": "48.858400",
-  "longitude": "2.294500",
-  "address": "Champ de Mars, 5 Avenue Anatole France, 75007 Paris",
-  "created_at": "2024-01-15T10:30:00Z",
-  "updated_at": "2024-01-15T10:30:00Z"
+  "name": "Красная площадь",
+  "description": "Главная площадь Москвы",
+  "latitude": "55.753900",
+  "longitude": "37.620800",
+  "address": "Москва, Красная площадь, 1",
+  "created_at": "2025-12-30T11:57:36.975610Z",
+  "updated_at": "2025-12-30T11:57:36.975610Z"
 }
 ```
 
@@ -233,30 +233,25 @@ curl -X POST http://127.0.0.1:8000/api/points/ \
 Запрос:
 
 ```bash
-curl -X GET "http://127.0.0.1:8000/api/points/?page=1&page_size=5" \
+curl -X GET "http://127.0.0.1:8000/api/points/" \
   -H "Authorization: Bearer <access_token>"
 ```
 
 Ответ:
 
 ```json
-{
-    "count": 1,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "id": 1,
-            "name": "Красная площадь",
-            "description": "Главная площадь Москвы",
-            "latitude": "55.753900",
-            "longitude": "37.620800",
-            "address": "Москва, Красная площадь, 1",
-            "created_at": "2025-12-30T11:57:36.975610Z",
-            "updated_at": "2025-12-30T11:57:36.975610Z"
-        }
-    ]
-}
+[
+    {
+        "id": 1,
+        "name": "Красная площадь",
+        "description": "Главная площадь Москвы",
+        "latitude": "55.753900",
+        "longitude": "37.620800",
+        "address": "Москва, Красная площадь, 1",
+        "created_at": "2025-12-30T11:57:36.975610Z",
+        "updated_at": "2025-12-30T11:57:36.975610Z"
+    }
+]
 ```
 
 #### Поиск точек в радиусе (GET /api/points/search/)
@@ -329,35 +324,30 @@ curl -X GET "http://127.0.0.1:8000/api/points/messages" \
 Ответ:
 
 ```json
-{
-    "count": 2,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "id": 2,
-            "point": 1,
-            "point_name": "Красная площадь",
-            "point_latitude": 55.7539,
-            "point_longitude": 37.6208,
-            "user": "admin",
-            "user_id": 1,
-            "text": "Красивое место! Рекомендую посетить на закате.",
-            "created_at": "2026-01-01T12:48:16.825569Z"
-        },
-        {
-            "id": 1,
-            "point": 1,
-            "point_name": "Красная площадь",
-            "point_latitude": 55.7539,
-            "point_longitude": 37.6208,
-            "user": "admin",
-            "user_id": 1,
-            "text": "Очень красивое место!",
-            "created_at": "2025-12-30T11:59:38.273265Z"
-        }
-    ]
-}
+[
+    {
+        "id": 2,
+        "point": 1,
+        "point_name": "Красная площадь",
+        "point_latitude": 55.7539,
+        "point_longitude": 37.6208,
+        "user": "admin",
+        "user_id": 1,
+        "text": "Красивое место! Рекомендую посетить на закате.",
+        "created_at": "2026-01-01T12:48:16.825569Z"
+    },
+    {
+        "id": 1,
+        "point": 1,
+        "point_name": "Красная площадь",
+        "point_latitude": 55.7539,
+        "point_longitude": 37.6208,
+        "user": "admin",
+        "user_id": 1,
+        "text": "Очень красивое место!",
+        "created_at": "2025-12-30T11:59:38.273265Z"
+    }
+]
 ```
 
 #### Поиск сообщений в радиусе (GET /api/points/messages/search/)
