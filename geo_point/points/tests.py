@@ -47,7 +47,7 @@ def spb_point():
 
 class TestLocationPointModel:
     """Тестирование модели LocationPoint."""
-    
+
     @pytest.mark.django_db
     def test_create_location_point(self, moscow_point):
         """Тест создания географической точки."""
@@ -56,13 +56,13 @@ class TestLocationPointModel:
         assert moscow_point.longitude == 37.620800
         assert moscow_point.description == 'Главная площадь Москвы'
         assert moscow_point.created_at is not None
-        
+
     @pytest.mark.django_db
     def test_location_point_str(self, moscow_point):
         """Тест строкового представления точки."""
         expected_str = "Москва, Красная площадь (55.7539, 37.6208)"
         assert str(moscow_point) == expected_str
-        
+
     @pytest.mark.django_db
     def test_location_point_validation_valid(self):
         """Тест валидации корректных координат."""

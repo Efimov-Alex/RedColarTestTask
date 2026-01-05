@@ -18,7 +18,7 @@ class LocationPointSerializer(serializers.ModelSerializer):
         if not -90 <= value <= 90:
             raise serializers.ValidationError("Широта должна быть в диапазоне от -90 до 90 градусов.")
         return round(value, 6)
-    
+
     def validate_longitude(self, value):
         """Валидация долготы."""
         if not -180 <= value <= 180:
@@ -58,9 +58,10 @@ class PointMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Мета-класс."""
+
         model = PointMessage
         fields = [
-            'id', 'point', 'point_name', 'point_latitude', 
+            'id', 'point', 'point_name', 'point_latitude',
             'point_longitude', 'user', 'user_id', 'text', 'created_at'
         ]
         read_only_fields = ('user', 'created_at')
