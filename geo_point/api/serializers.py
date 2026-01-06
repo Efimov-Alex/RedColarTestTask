@@ -15,14 +15,20 @@ class LocationPointSerializer(serializers.ModelSerializer):
 
     def validate_latitude(self, value):
         """Валидация широты."""
+        error_msg = (
+            "Широта должна быть в диапазоне от -90 до 90 градусов."
+        )
         if not -90 <= value <= 90:
-            raise serializers.ValidationError("Широта должна быть в диапазоне от -90 до 90 градусов.")
+            raise serializers.ValidationError(error_msg)
         return round(value, 6)
 
     def validate_longitude(self, value):
         """Валидация долготы."""
+        error_msg = (
+            "Долгота должна быть в диапазоне от -180 до 180 градусов."
+        )
         if not -180 <= value <= 180:
-            raise serializers.ValidationError("Долгота должна быть в диапазоне от -180 до 180 градусов.")
+            raise serializers.ValidationError(error_msg)
         return round(value, 6)
 
 

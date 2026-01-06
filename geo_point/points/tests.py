@@ -72,7 +72,7 @@ class TestLocationPointModel:
             longitude=90.0
         )
         point.full_clean()
-        
+
     @pytest.mark.django_db
     def test_location_point_validation_invalid_latitude(self):
         """Тест валидации некорректной широты."""
@@ -83,7 +83,7 @@ class TestLocationPointModel:
         )
         with pytest.raises(ValidationError):
             point.full_clean()
-            
+
     @pytest.mark.django_db
     def test_location_point_validation_invalid_longitude(self):
         """Тест валидации некорректной долготы."""
@@ -98,7 +98,7 @@ class TestLocationPointModel:
 
 class TestPointMessageModel:
     """Тестирование модели PointMessage."""
-    
+
     @pytest.mark.django_db
     def test_create_point_message(self, test_user, moscow_point):
         """Тест создания сообщения к точке."""
@@ -107,12 +107,11 @@ class TestPointMessageModel:
             user=test_user,
             text='Тестовое сообщение'
         )
-        
         assert message.point == moscow_point
         assert message.user == test_user
         assert message.text == 'Тестовое сообщение'
         assert message.created_at is not None
-        
+
     @pytest.mark.django_db
     def test_point_message_str(self, test_user, moscow_point):
         """Тест строкового представления сообщения."""
@@ -121,10 +120,9 @@ class TestPointMessageModel:
             user=test_user,
             text='Тестовое сообщение'
         )
-        
         expected_str = f"Сообщение от {test_user.username} к точке {moscow_point.name}"
         assert str(message) == expected_str
-        
+
     @pytest.mark.django_db
     def test_message_related_to_point(self, test_user, moscow_point):
         """Тест связи сообщения с точкой."""
@@ -138,46 +136,43 @@ class TestPointMessageModel:
             user=test_user,
             text='Сообщение 2'
         )
-        
         assert moscow_point.messages.count() == 2
         assert all(msg.point == moscow_point for msg in moscow_point.messages.all())
 
 
 class TestUtils:
     """Тестирование утилитных функций."""
-    
+
     def test_get_distance_same_point(self):
         """Тест расстояния между одинаковыми точками."""
         distance = get_distance(55.7539, 37.6208, 55.7539, 37.6208)
         assert distance == 0.0
-        
+
     def test_get_distance_moscow_to_spb(self):
         """Тест расстояния Москва -> Санкт-Петербург."""
         distance = get_distance(55.7558, 37.6173, 59.9343, 30.3351)
         assert 600 < distance < 650
-        
+
     @pytest.mark.django_db
     def test_get_points_in_radius_empty(self, moscow_point, spb_point):
         """Тест поиска точек в радиусе (пустой результат)."""
         center_lat, center_lon = 55.7540, 37.6210
         points = get_points_in_radius(center_lat, center_lon, 0.1)
-        
         assert len(points) == 1
         assert points[0]['name'] == 'Москва, Красная площадь'
-        
+
     @pytest.mark.django_db
     def test_get_points_in_radius_with_results(self, moscow_point, spb_point):
         """Тест поиска точек в радиусе (есть результаты)."""
         points = get_points_in_radius(55.7558, 37.6173, 700)
-        
         assert len(points) == 2
         assert points[0]['distance_km'] <= points[1]['distance_km']
         assert points[0]['name'] == 'Москва, Красная площадь'
-        
+
     @pytest.mark.django_db
     def test_get_points_in_radius_fields(self, moscow_point):
         """Тест полей возвращаемых точек."""
-        points = get_points_in_radius(55.7539, 37.6208, 1)  
+        points = get_points_in_radius(55.7539, 37.6208, 1)
         assert len(points) == 1
         point_data = points[0]
         expected_fields = {
