@@ -120,7 +120,8 @@ class TestPointMessageModel:
             user=test_user,
             text='Тестовое сообщение'
         )
-        expected_str = f"Сообщение от {test_user.username} к точке {moscow_point.name}"
+        expected_str = (f"Сообщение от {test_user.username} "
+                        f"к точке {moscow_point.name}")
         assert str(message) == expected_str
 
     @pytest.mark.django_db
@@ -137,7 +138,8 @@ class TestPointMessageModel:
             text='Сообщение 2'
         )
         assert moscow_point.messages.count() == 2
-        assert all(msg.point == moscow_point for msg in moscow_point.messages.all())
+        assert all(msg.point == moscow_point
+                   for msg in moscow_point.messages.all())
 
 
 class TestUtils:

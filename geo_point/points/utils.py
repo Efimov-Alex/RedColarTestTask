@@ -25,8 +25,10 @@ def get_points_in_radius(lat, lon, radius_km):
                 'latitude': float(point.latitude),
                 'longitude': float(point.longitude),
                 'address': point.address,
-                'created_at': point.created_at.isoformat() if point.created_at else None,
-                'updated_at': point.updated_at.isoformat() if point.updated_at else None,
+                'created_at': (point.created_at.isoformat()
+                               if point.created_at else None),
+                'updated_at': (point.updated_at.isoformat()
+                               if point.updated_at else None),
                 'distance_km': distance
             })
 
